@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BaBe Aja - Katalog 20 Produk</title>
+    <title>BaBe Aja - Detail Produk & Rekomendasi</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -13,6 +13,7 @@
         
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
+        /* Modal Animation */
         #product-detail-modal {
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translateY(100%);
@@ -25,14 +26,22 @@
             background: linear-gradient(135deg, #E31E52 0%, #ff4d7d 100%);
         }
 
-        .tab-btn.active {
-            color: #E31E52;
-            border-bottom: 3px solid #E31E52;
-        }
-
         .cat-btn.active {
             background-color: #E31E52;
             color: white;
+        }
+
+        .dot-active {
+            background-color: white !important;
+            width: 12px !important;
+        }
+
+        .side-share-btn {
+            transition: transform 0.1s;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        .side-share-btn:active {
+            transform: scale(0.9);
         }
     </style>
 </head>
@@ -44,8 +53,8 @@
             <span class="text-2xl">📦</span>
             <h1 class="text-xl font-black tracking-tight uppercase">BaBe Aja</h1>
         </div>
-        <div id="affiliate-points" class="bg-white/20 px-3 py-1.5 rounded-lg text-[10px] font-bold">
-            💰 <span id="user-points-header">Rp 7.500</span>
+        <div class="bg-white/20 px-3 py-1.5 rounded-lg text-[10px] font-bold">
+            💰 <span>Rp 7.500</span>
         </div>
     </header>
 
@@ -53,73 +62,111 @@
     <main id="content">
         <!-- Home Page -->
         <section id="page-home" class="p-4">
-            <!-- Search Bar -->
             <div class="mb-4">
                 <input type="text" id="search-input" oninput="renderProducts()" placeholder="Cari barang bekas..." class="w-full px-4 py-3 border border-gray-100 rounded-xl bg-gray-50 outline-none text-sm focus:ring-2 focus:ring-red-200 transition-all">
             </div>
 
-            <!-- Category Filter -->
             <div class="flex space-x-2 overflow-x-auto no-scrollbar mb-6 pb-1">
-                <button onclick="filterCategory('Semua')" class="cat-btn active bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0 transition-colors">Semua</button>
-                <button onclick="filterCategory('Motor')" class="cat-btn bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0 transition-colors">Motor</button>
-                <button onclick="filterCategory('HP')" class="cat-btn bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0 transition-colors">HP</button>
-                <button onclick="filterCategory('Laptop')" class="cat-btn bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0 transition-colors">Laptop</button>
-                <button onclick="filterCategory('Mobil')" class="cat-btn bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0 transition-colors">Mobil</button>
-                <button onclick="filterCategory('Elektronik')" class="cat-btn bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0 transition-colors">Elektronik</button>
+                <button onclick="filterCategory('Semua')" class="cat-btn active bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0">Semua</button>
+                <button onclick="filterCategory('Motor')" class="cat-btn bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0">Motor</button>
+                <button onclick="filterCategory('HP')" class="cat-btn bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0">HP</button>
+                <button onclick="filterCategory('Laptop')" class="cat-btn bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0">Laptop</button>
+                <button onclick="filterCategory('Mobil')" class="cat-btn bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0">Mobil</button>
+                <button onclick="filterCategory('Elektronik')" class="cat-btn bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0">Elektronik</button>
             </div>
 
-            <!-- Product Grid -->
             <div id="product-list" class="grid grid-cols-2 gap-3">
-                <!-- Products will be injected here -->
+                <!-- Products via JS -->
             </div>
         </section>
 
         <!-- Account Page -->
         <section id="page-account" class="hidden">
-            <div class="profile-card text-white p-8 rounded-b-[3rem] shadow-2xl relative overflow-hidden">
-                <div class="relative z-10 flex flex-col items-center text-center">
-                    <div class="w-20 h-20 rounded-full border-4 border-white/30 overflow-hidden mb-3 shadow-lg">
-                        <img src="https://i.pravatar.cc/150?u=babe_user" class="w-full h-full object-cover">
-                    </div>
-                    <h2 class="text-lg font-black uppercase tracking-tight">Profil Saya</h2>
-                    <div class="bg-white/10 px-4 py-2 rounded-2xl mt-4 w-full backdrop-blur-md border border-white/20">
-                        <p class="text-[9px] font-bold uppercase opacity-80 tracking-widest">Total Saldo Komisi</p>
-                        <p class="text-2xl font-black" id="account-points">Rp 7.500</p>
-                    </div>
+            <div class="profile-card text-white p-8 rounded-b-[3rem] shadow-2xl relative overflow-hidden text-center">
+                <div class="w-20 h-20 rounded-full border-4 border-white/30 overflow-hidden mb-3 shadow-lg mx-auto">
+                    <img src="https://i.pravatar.cc/150?u=babe_user" class="w-full h-full object-cover">
                 </div>
-            </div>
-
-            <div class="flex border-b mt-6 mx-4 sticky top-16 bg-white z-20">
-                <button onclick="switchTab('my-items')" id="tab-my-items" class="tab-btn flex-1 py-3 text-[10px] font-black uppercase tracking-tighter active">
-                    Iklan Saya
-                </button>
-                <button onclick="switchTab('affiliate-items')" id="tab-affiliate-items" class="tab-btn flex-1 py-3 text-[10px] font-black uppercase tracking-tighter">
-                    Riwayat Komisi
-                </button>
-            </div>
-
-            <div class="p-5 pb-24">
-                <div id="section-my-items" class="tab-content space-y-6">
-                    <div>
-                        <h3 class="text-[11px] font-black uppercase text-gray-400 mb-3 flex items-center">
-                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span> Belum Terjual (5)
-                        </h3>
-                        <div id="active-list" class="grid grid-cols-2 gap-3"></div>
-                    </div>
-                    <hr class="border-dashed">
-                    <div>
-                        <h3 class="text-[11px] font-black uppercase text-gray-400 mb-3 flex items-center">
-                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span> Sudah Terjual (10)
-                        </h3>
-                        <div id="sold-list" class="grid grid-cols-2 gap-3 opacity-75"></div>
-                    </div>
-                </div>
-                <div id="section-affiliate-items" class="tab-content hidden space-y-3">
-                    <div id="affiliate-history-list" class="space-y-3"></div>
-                </div>
+                <h2 class="text-lg font-black uppercase">Profil Saya</h2>
+                <p class="text-2xl font-black mt-2">Rp 7.500</p>
             </div>
         </section>
     </main>
+
+    <!-- Product Detail Modal -->
+    <div id="product-detail-modal" class="fixed inset-0 bg-white z-[60] overflow-y-auto no-scrollbar hidden flex-col">
+        <!-- Close Bar -->
+        <div class="absolute top-0 left-0 z-[70] p-4">
+            <button onclick="closeDetail()" class="w-10 h-10 bg-black/30 text-white rounded-full flex items-center justify-center backdrop-blur-md">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+        </div>
+
+        <!-- Media & Side Share Container -->
+        <div class="relative w-full aspect-[4/5] bg-gray-200">
+            <div id="modal-slider" class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar h-full">
+                <!-- Images here -->
+            </div>
+            
+            <!-- SIDE SHARE ICONS (RIGHT BOTTOM) -->
+            <div class="absolute right-3 bottom-12 flex flex-col space-y-3 z-[75]">
+                <!-- WhatsApp -->
+                <button onclick="shareProduct('WhatsApp')" class="side-share-btn w-10 h-10 bg-[#25D366] rounded-full flex items-center justify-center text-white">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.672 1.433 5.662 1.433h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                </button>
+                <!-- Instagram -->
+                <button onclick="shareProduct('Instagram')" class="side-share-btn w-10 h-10 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] rounded-full flex items-center justify-center text-white">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.266.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </button>
+                <!-- Facebook -->
+                <button onclick="shareProduct('Facebook')" class="side-share-btn w-10 h-10 bg-[#1877F2] rounded-full flex items-center justify-center text-white">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </button>
+                <!-- TikTok (Updated Accurate Icon) -->
+                <button onclick="shareProduct('TikTok')" class="side-share-btn w-10 h-10 bg-black rounded-full flex items-center justify-center text-white">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 448 512">
+                        <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/>
+                    </svg>
+                </button>
+                <!-- YouTube -->
+                <button onclick="shareProduct('YouTube')" class="side-share-btn w-10 h-10 bg-[#FF0000] rounded-full flex items-center justify-center text-white">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </button>
+            </div>
+
+            <!-- Dots (Slide Indicators) -->
+            <div class="absolute bottom-4 left-0 right-0 flex justify-center space-x-1.5">
+                <div class="dot h-1.5 w-1.5 bg-white/40 rounded-full transition-all dot-active"></div>
+                <div class="dot h-1.5 w-1.5 bg-white/40 rounded-full transition-all"></div>
+                <div class="dot h-1.5 w-1.5 bg-white/40 rounded-full transition-all"></div>
+                <div class="dot h-1.5 w-1.5 bg-white/40 rounded-full transition-all"></div>
+                <div class="dot h-1.5 w-1.5 bg-white/40 rounded-full transition-all"></div>
+                <div class="dot h-1.5 w-1.5 bg-white/40 rounded-full transition-all"></div>
+            </div>
+        </div>
+
+        <!-- Detail Content -->
+        <div class="p-6 bg-white flex-1">
+            <div class="flex justify-between items-start mb-2">
+                <div>
+                    <p id="modal-loc" class="text-bukalapak text-[10px] font-black uppercase mb-1"></p>
+                    <h2 id="modal-title" class="text-xl font-black text-gray-900 uppercase leading-tight"></h2>
+                </div>
+                <p id="modal-price" class="text-lg font-black text-gray-900 whitespace-nowrap ml-4"></p>
+            </div>
+            
+            <div class="bg-green-50 border border-green-100 p-3 rounded-xl mb-6 flex items-center justify-between">
+                <span class="text-[10px] font-black text-green-700 uppercase">Komisi Penjualan</span>
+                <span class="text-xs font-black text-green-700">Rp 500</span>
+            </div>
+            
+            <hr class="mb-6">
+            
+            <h3 class="text-[11px] font-black uppercase text-gray-400 mb-4">Rekomendasi Terdekat</h3>
+            <div id="nearby-list" class="grid grid-cols-2 gap-4 pb-10">
+                <!-- Recommendations via JS -->
+            </div>
+        </div>
+    </div>
 
     <!-- Footer Nav -->
     <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around items-center h-16 max-w-md mx-auto z-40 shadow-2xl">
@@ -134,185 +181,100 @@
     </nav>
 
     <script>
-        let currentCategory = 'Semua';
-
-        // 20 Produk Dummy untuk Beranda
         const homeProducts = [
-            // MOTOR
-            { id: 101, title: "Yamaha NMAX 2022 ABS", category: "Motor", loc: "Coblong, Bandung", price: "Rp 28.500.000", img: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=400" },
-            { id: 102, title: "Honda Vario 160 Terbaru", category: "Motor", loc: "Sukajadi, Bandung", price: "Rp 24.200.000", img: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=400" },
-            { id: 103, title: "Kawasaki Ninja ZX25R", category: "Motor", loc: "Cicendo, Bandung", price: "Rp 98.000.000", img: "https://images.unsplash.com/photo-1444491741275-3747c53c99b4?w=400" },
-            { id: 104, title: "Vespa Sprint S 150", category: "Motor", loc: "Gedebage, Bandung", price: "Rp 45.000.000", img: "https://images.unsplash.com/photo-1506540232328-89c02d640974?w=400" },
-            // HP
-            { id: 201, title: "iPhone 15 Pro Titanium", category: "HP", loc: "Gambir, Jakarta", price: "Rp 18.500.000", img: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400" },
-            { id: 202, title: "Samsung S24 Ultra", category: "HP", loc: "Tebet, Jakarta", price: "Rp 17.200.000", img: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400" },
-            { id: 203, title: "Xiaomi 14 Global Version", category: "HP", loc: "Kemang, Jakarta", price: "Rp 11.500.000", img: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400" },
-            { id: 204, title: "Google Pixel 8 Pro", category: "HP", loc: "Menteng, Jakarta", price: "Rp 13.000.000", img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400" },
-            // LAPTOP
-            { id: 301, title: "MacBook Pro M3 Max", category: "Laptop", loc: "Tegalsari, Surabaya", price: "Rp 45.000.000", img: "https://images.unsplash.com/photo-1517336714460-45731454e2d6?w=400" },
-            { id: 302, title: "Asus ROG Zephyrus G14", category: "Laptop", loc: "Gubeng, Surabaya", price: "Rp 22.500.000", img: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400" },
-            { id: 303, title: "Dell XPS 13 Plus", category: "Laptop", loc: "Mulyorejo, Surabaya", price: "Rp 19.800.000", img: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=400" },
-            { id: 304, title: "Lenovo ThinkPad X1 Carbon", category: "Laptop", loc: "Wonokromo, Surabaya", price: "Rp 15.400.000", img: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400" },
-            // MOBIL
-            { id: 401, title: "Toyota Fortuner 2023", category: "Mobil", loc: "Klojen, Malang", price: "Rp 450.000.000", img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=400" },
-            { id: 402, title: "Honda HRV Prestige", category: "Mobil", loc: "Lowokwaru, Malang", price: "Rp 320.000.000", img: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400" },
-            { id: 403, title: "Hyundai IONIQ 5", category: "Mobil", loc: "Blimbing, Malang", price: "Rp 650.000.000", img: "https://images.unsplash.com/photo-1662013915837-775191060933?w=400" },
-            { id: 404, title: "Mitsubishi Pajero Sport", category: "Mobil", loc: "Sukun, Malang", price: "Rp 480.000.000", img: "https://images.unsplash.com/photo-1532581133564-9ca29e9e8ce9?w=400" },
-            // ELEKTRONIK
-            { id: 501, title: "Sony PS5 Slim Console", category: "Elektronik", loc: "Danurejan, Yogyakarta", price: "Rp 7.200.000", img: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=400" },
-            { id: 502, title: "LG OLED TV 55 Inch", category: "Elektronik", loc: "Gondokusuman, Yogyakarta", price: "Rp 14.500.000", img: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400" },
-            { id: 503, title: "Mirrorless Sony A7 III", category: "Elektronik", loc: "Mantrijeron, Yogyakarta", price: "Rp 19.200.000", img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400" },
-            { id: 504, title: "Dyson V15 Vacuum", category: "Elektronik", loc: "Umbulharjo, Yogyakarta", price: "Rp 9.500.000", img: "https://images.unsplash.com/photo-1558317374-067df5f15430?w=400" },
+            { id: 101, title: "Yamaha NMAX 2022 ABS", category: "Motor", loc: "Coblong, Bandung", price: "Rp 28.500.000", img: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600" },
+            { id: 102, title: "Honda Vario 160 Terbaru", category: "Motor", loc: "Sukajadi, Bandung", price: "Rp 24.200.000", img: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600" },
+            { id: 201, title: "iPhone 15 Pro Titanium", category: "HP", loc: "Gambir, Jakarta", price: "Rp 18.500.000", img: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600" },
+            { id: 301, title: "MacBook Pro M3 Max", category: "Laptop", loc: "Tegalsari, Surabaya", price: "Rp 45.000.000", img: "https://images.unsplash.com/photo-1517336714460-45731454e2d6?w=600" },
+            { id: 401, title: "Toyota Fortuner 2023", category: "Mobil", loc: "Klojen, Malang", price: "Rp 450.000.000", img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600" },
         ];
 
-        // Data Akun (Sesuai histori sebelumnya)
-        const myProducts = [
-            { id: 1, title: "Knalpot Racing Bobokan", status: 'active', price: 'Rp 450.000', img: 'https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?w=200' },
-            { id: 2, title: "Velg Rossi Ring 17", status: 'active', price: 'Rp 1.200.000', img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6?w=200' },
-            { id: 3, title: "Spion Tomok Karbon", status: 'active', price: 'Rp 150.000', img: 'https://images.unsplash.com/photo-1611694842867-e92398457785?w=200' },
-            { id: 4, title: "Shockbreaker KTC", status: 'active', price: 'Rp 850.000', img: 'https://images.unsplash.com/photo-1544933863-482c6caef600?w=200' },
-            { id: 5, title: "Ban Pirelli Diablo Rosso", status: 'active', price: 'Rp 600.000', img: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=200' },
-            { id: 6, title: "Helm KYT Vendetta 2", status: 'sold', price: 'Terjual', img: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=200' },
-            { id: 7, title: "Xiaomi Redmi Note 10", status: 'sold', price: 'Terjual', img: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=200' },
-            { id: 8, title: "Stik PS4 Original", status: 'sold', price: 'Terjual', img: 'https://images.unsplash.com/photo-1592840496694-26d035b52b48?w=200' },
-            { id: 9, title: "Jaket Riding Alpinestar", status: 'sold', price: 'Terjual', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200' },
-            { id: 10, title: "Gopro Hero 7 Black", status: 'sold', price: 'Terjual', img: 'https://images.unsplash.com/photo-1524333865982-ac437537b88b?w=200' },
-            { id: 11, title: "Keyboard Vortex Series", status: 'sold', price: 'Terjual', img: 'https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?w=200' },
-            { id: 12, title: "Mouse Logitech G502", status: 'sold', price: 'Terjual', img: 'https://images.unsplash.com/photo-1527814732934-94a1e5d19208?w=200' },
-            { id: 13, title: "Monitor LG 24 Inch", status: 'sold', price: 'Terjual', img: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=200' },
-            { id: 14, title: "Headset Steelseries", status: 'sold', price: 'Terjual', img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200' },
-            { id: 15, title: "Tas Eiger 35L", status: 'sold', price: 'Terjual', img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200' }
-        ];
-
-        const affiliateHistory = [
-            { id: 1, name: "Yamaha NMAX 2022", platform: "WhatsApp", date: "Tadi", amount: "Rp 500" },
-            { id: 2, name: "iPhone 15 Pro", platform: "Facebook", date: "1 jam lalu", amount: "Rp 500" },
-            { id: 3, name: "MacBook Pro M3", platform: "Instagram", date: "3 jam lalu", amount: "Rp 500" },
-            { id: 4, name: "Sony PS5 Slim", platform: "WhatsApp", date: "6 jam lalu", amount: "Rp 500" },
-            { id: 5, name: "Honda HRV Prestige", platform: "TikTok", date: "Kemarin", amount: "Rp 500" },
-            { id: 6, name: "Samsung S24 Ultra", platform: "YouTube", date: "Kemarin", amount: "Rp 500" },
-            { id: 7, name: "Toyota Fortuner", platform: "WhatsApp", date: "Kemarin", amount: "Rp 500" },
-            { id: 8, name: "Dyson V15 Vacuum", platform: "Facebook", date: "2 hari lalu", amount: "Rp 500" },
-            { id: 9, name: "LG OLED TV 55", platform: "Instagram", date: "2 hari lalu", amount: "Rp 500" },
-            { id: 10, name: "Asus ROG G14", platform: "WhatsApp", date: "3 hari lalu", amount: "Rp 500" },
-            { id: 11, name: "Vespa Sprint S", platform: "WhatsApp", date: "3 hari lalu", amount: "Rp 500" },
-            { id: 12, name: "Hyundai IONIQ 5", platform: "TikTok", date: "4 hari lalu", amount: "Rp 500" },
-            { id: 13, name: "Xiaomi 14 Global", platform: "Facebook", date: "5 hari lalu", amount: "Rp 500" },
-            { id: 14, name: "Google Pixel 8", platform: "Instagram", date: "6 hari lalu", amount: "Rp 500" },
-            { id: 15, name: "Kawasaki Ninja ZX", platform: "YouTube", date: "7 hari lalu", amount: "Rp 500" }
-        ];
+        let currentCategory = 'Semua';
 
         function renderProducts() {
             const list = document.getElementById('product-list');
             const query = document.getElementById('search-input').value.toLowerCase();
-            
-            let filtered = homeProducts;
-            if(currentCategory !== 'Semua') {
-                filtered = filtered.filter(p => p.category === currentCategory);
-            }
-            
-            filtered = filtered.filter(p => p.title.toLowerCase().includes(query));
+            let filtered = homeProducts.filter(p => (currentCategory === 'Semua' || p.category === currentCategory) && p.title.toLowerCase().includes(query));
 
             list.innerHTML = filtered.map(p => `
-                <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex flex-col h-full active:scale-95 transition-all">
-                    <div class="relative">
-                        <img src="${p.img}" class="w-full h-32 object-cover bg-gray-100">
-                        <span class="absolute top-2 left-2 bg-black/50 text-white text-[7px] px-1.5 py-0.5 rounded uppercase font-black">${p.category}</span>
-                    </div>
+                <div onclick="openDetail(${p.id})" class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex flex-col h-full active:scale-95 transition-all cursor-pointer">
+                    <img src="${p.img}" class="w-full h-32 object-cover">
                     <div class="p-3">
-                        <p class="text-[8px] text-bukalapak font-black uppercase mb-1 tracking-tighter">${p.loc}</p>
-                        <h3 class="font-bold text-[10px] text-gray-800 uppercase line-clamp-2 leading-tight h-8 mb-1">${p.title}</h3>
-                        <p class="text-[11px] font-black text-gray-900 mb-2">${p.price}</p>
-                        <div class="flex items-center justify-between border-t pt-2">
-                             <span class="text-[7px] text-gray-400 font-bold uppercase">Komisi</span>
-                             <span class="text-[8px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded font-black">Rp 500</span>
-                        </div>
+                        <p class="text-[8px] text-bukalapak font-black uppercase mb-1">${p.loc}</p>
+                        <h3 class="font-bold text-[10px] text-gray-800 uppercase line-clamp-2 h-8 mb-1">${p.title}</h3>
+                        <p class="text-[11px] font-black text-gray-900">${p.price}</p>
                     </div>
                 </div>
             `).join('');
-            
-            if(filtered.length === 0) {
-                list.innerHTML = '<div class="col-span-2 py-10 text-center text-gray-400 text-[10px] font-black uppercase tracking-widest">Produk tidak ditemukan</div>';
-            }
         }
 
         function filterCategory(cat) {
             currentCategory = cat;
             document.querySelectorAll('.cat-btn').forEach(btn => {
-                if(btn.innerText.toLowerCase() === cat.toLowerCase()) {
-                    btn.classList.add('active', 'bg-bukalapak', 'text-white');
-                    btn.classList.remove('bg-gray-100', 'text-gray-600');
-                } else {
-                    btn.classList.remove('active', 'bg-bukalapak', 'text-white');
-                    btn.classList.add('bg-gray-100', 'text-gray-600');
-                }
+                const isActive = btn.innerText.toLowerCase() === cat.toLowerCase();
+                btn.classList.toggle('active', isActive);
+                btn.classList.toggle('bg-bukalapak', isActive);
+                btn.classList.toggle('text-white', isActive);
             });
             renderProducts();
+        }
+
+        function openDetail(id) {
+            const product = homeProducts.find(p => p.id === id);
+            const modal = document.getElementById('product-detail-modal');
+            const slider = document.getElementById('modal-slider');
+            
+            document.getElementById('modal-title').innerText = product.title;
+            document.getElementById('modal-price').innerText = product.price;
+            document.getElementById('modal-loc').innerText = product.loc;
+
+            slider.innerHTML = Array.from({length: 6}, (_, i) => `
+                <div class="min-w-full snap-center h-full">
+                    <img src="${product.img}&sig=${i}" class="w-full h-full object-cover">
+                </div>
+            `).join('');
+
+            const recList = document.getElementById('nearby-list');
+            recList.innerHTML = homeProducts.filter(p => p.id !== id).slice(0, 4).map(p => `
+                <div onclick="event.stopPropagation(); openDetail(${p.id})" class="bg-gray-50 rounded-xl overflow-hidden">
+                    <img src="${p.img}" class="w-full h-24 object-cover">
+                    <div class="p-2">
+                        <h4 class="text-[9px] font-black uppercase truncate">${p.title}</h4>
+                        <p class="text-[10px] font-black">${p.price}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.add('active'), 10);
+            
+            slider.onscroll = () => {
+                const activeIndex = Math.round(slider.scrollLeft / slider.clientWidth);
+                document.querySelectorAll('.dot').forEach((d, idx) => d.classList.toggle('dot-active', idx === activeIndex));
+            };
+        }
+
+        function closeDetail() {
+            const modal = document.getElementById('product-detail-modal');
+            modal.classList.remove('active');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function shareProduct(platform) {
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-24 left-1/2 -translate-x-1/2 bg-black/80 text-white px-6 py-2 rounded-full text-[10px] font-bold z-[100] uppercase";
+            toast.innerText = `Berbagi via ${platform}...`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
         }
 
         function showPage(page) {
             document.getElementById('page-home').classList.toggle('hidden', page !== 'home');
             document.getElementById('page-account').classList.toggle('hidden', page !== 'account');
-            
-            document.querySelectorAll('.nav-link').forEach(l => {
-                l.classList.remove('text-bukalapak', 'active');
-                l.classList.add('text-gray-400');
-            });
-            document.getElementById('nav-' + page).classList.add('text-bukalapak', 'active');
-            document.getElementById('nav-' + page).classList.remove('text-gray-400');
-            
-            if(page === 'account') renderAccountData();
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('text-bukalapak', l.id === 'nav-' + page));
         }
 
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-            
-            document.getElementById('tab-' + tab).classList.add('active');
-            document.getElementById('section-' + tab).classList.remove('hidden');
-        }
-
-        function renderAccountData() {
-            const activeList = document.getElementById('active-list');
-            const soldList = document.getElementById('sold-list');
-            const affList = document.getElementById('affiliate-history-list');
-
-            activeList.innerHTML = myProducts.filter(p => p.status === 'active').map(p => `
-                <div class="bg-white rounded-xl border border-gray-100 p-2 shadow-sm overflow-hidden">
-                    <img src="${p.img}" class="w-full h-24 object-cover rounded-lg mb-2">
-                    <h4 class="text-[9px] font-black uppercase truncate">${p.title}</h4>
-                    <p class="text-[9px] text-bukalapak font-bold">${p.price}</p>
-                </div>
-            `).join('');
-
-            soldList.innerHTML = myProducts.filter(p => p.status === 'sold').map(p => `
-                <div class="bg-gray-50 rounded-xl border border-gray-100 p-2 overflow-hidden relative">
-                    <span class="absolute top-2 right-2 bg-black text-white text-[6px] px-1 font-bold z-10 uppercase">TERJUAL</span>
-                    <img src="${p.img}" class="w-full h-24 object-cover rounded-lg mb-2 grayscale">
-                    <h4 class="text-[9px] font-black uppercase truncate text-gray-400">${p.title}</h4>
-                </div>
-            `).join('');
-
-            affList.innerHTML = affiliateHistory.map(h => `
-                <div class="bg-white p-3 rounded-xl border border-gray-100 flex items-center justify-between shadow-sm">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center text-green-600 text-[10px] font-black">💰</div>
-                        <div>
-                            <p class="text-[9px] font-black uppercase">${h.name}</p>
-                            <p class="text-[7px] text-gray-400 font-bold uppercase">${h.date} via ${h.platform}</p>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-[10px] font-black text-green-600">+${h.amount}</p>
-                        <p class="text-[6px] text-gray-300 font-bold uppercase">Berhasil</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        window.onload = () => {
-            renderProducts();
-        };
+        window.onload = renderProducts;
     </script>
 </body>
 </html>
