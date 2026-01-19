@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BaBe Aja - Multi Share Social & Affiliate</title>
+    <title>BaBe Aja - Katalog Produk Bekas</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -93,7 +93,18 @@
     <!-- Home Page -->
     <main id="page-home" class="p-4">
         <div class="mb-5">
-            <input type="text" id="search-input" oninput="renderProducts()" placeholder="Cari barang bekas berkualitas..." class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 outline-none text-sm mb-4 focus:ring-2 focus:ring-red-200 transition-all">
+            <!-- Filter Kategori Kustom -->
+            <div class="flex space-x-2 overflow-x-auto no-scrollbar mb-4 pb-1">
+                <button onclick="filterCategory('Semua')" class="cat-btn bg-bukalapak text-white px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0">Semua</button>
+                <button onclick="filterCategory('Motor')" class="cat-btn bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0">Motor</button>
+                <button onclick="filterCategory('HP')" class="cat-btn bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0">HP</button>
+                <button onclick="filterCategory('Laptop')" class="cat-btn bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0">Laptop</button>
+                <button onclick="filterCategory('Mobil')" class="cat-btn bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0">Mobil</button>
+                <button onclick="filterCategory('Elektronik')" class="cat-btn bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-[10px] font-black uppercase flex-shrink-0">Elektronik</button>
+            </div>
+
+            <input type="text" id="search-input" oninput="renderProducts()" placeholder="Cari barang bekas..." class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 outline-none text-sm mb-4 focus:ring-2 focus:ring-red-200 transition-all">
+            
             <div id="product-list" class="grid grid-cols-2 gap-3"></div>
         </div>
     </main>
@@ -117,31 +128,30 @@
                 <div class="image-slider h-96 bg-gray-900" id="detail-slider" onscroll="updateDots(this)"></div>
                 <div id="dot-container" class="absolute bottom-6 left-6 right-0 flex justify-start items-center pointer-events-none"></div>
 
-                <!-- Bagian Affiliate info -->
                 <div class="absolute top-4 left-4 bg-black/60 backdrop-blur text-white px-3 py-1.5 rounded-full text-[10px] font-bold z-[75] flex items-center space-x-2">
-                    <span>📢 Bagikan & dapatkan Komisi Rp 500</span>
+                    <span>📢 Bagikan & Komisi Rp 500</span>
                 </div>
 
-                <!-- Multi Social Share Icons -->
+                <!-- Multi Social Share Buttons -->
                 <div class="absolute bottom-4 right-4 flex flex-col space-y-2 z-[75]">
-                    <!-- WhatsApp -->
-                    <button onclick="trackAffiliate('WA')" class="share-float-btn bg-[#25D366] text-white p-2.5 rounded-full shadow-lg">
+                    <!-- WA -->
+                    <button onclick="trackAffiliate('WhatsApp')" class="share-float-btn bg-[#25D366] text-white p-2.5 rounded-full shadow-lg">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                     </button>
-                    <!-- Facebook -->
-                    <button onclick="trackAffiliate('FB')" class="share-float-btn bg-[#1877F2] text-white p-2.5 rounded-full shadow-lg">
+                    <!-- FB -->
+                    <button onclick="trackAffiliate('Facebook')" class="share-float-btn bg-[#1877F2] text-white p-2.5 rounded-full shadow-lg">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                     </button>
-                    <!-- Instagram -->
-                    <button onclick="trackAffiliate('IG')" class="share-float-btn bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white p-2.5 rounded-full shadow-lg">
+                    <!-- IG -->
+                    <button onclick="trackAffiliate('Instagram')" class="share-float-btn bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white p-2.5 rounded-full shadow-lg">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                     </button>
                     <!-- TikTok -->
-                    <button onclick="trackAffiliate('TT')" class="share-float-btn bg-black text-white p-2.5 rounded-full shadow-lg">
+                    <button onclick="trackAffiliate('TikTok')" class="share-float-btn bg-black text-white p-2.5 rounded-full shadow-lg">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.9-.32-1.98-.23-2.81.33-.85.51-1.44 1.42-1.58 2.41-.01.53.01 1.07.21 1.57.45 1.08 1.6 1.83 2.76 1.88 1.35.12 2.74-.63 3.32-1.84.14-.3.21-.62.24-.95.03-3.87.01-7.74.01-11.61z"/></svg>
                     </button>
                     <!-- YouTube -->
-                    <button onclick="trackAffiliate('YT')" class="share-float-btn bg-[#FF0000] text-white p-2.5 rounded-full shadow-lg">
+                    <button onclick="trackAffiliate('YouTube')" class="share-float-btn bg-[#FF0000] text-white p-2.5 rounded-full shadow-lg">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                     </button>
                 </div>
@@ -179,7 +189,7 @@
                 Barang Anda
             </button>
             <button onclick="switchTab('affiliate-items')" id="tab-affiliate-items" class="tab-btn flex-1 py-3 text-[10px] font-black uppercase tracking-tighter">
-                Terjual Affiliate
+                Komisi Affiliate
             </button>
         </div>
 
@@ -187,12 +197,7 @@
             <div id="section-my-items" class="tab-content">
                 <div id="my-products-list" class="grid grid-cols-2 gap-3"></div>
             </div>
-
             <div id="section-affiliate-items" class="tab-content hidden">
-                <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-xl mb-4">
-                    <p class="text-[9px] text-indigo-700 font-bold uppercase">💡 Info Affiliate</p>
-                    <p class="text-[8px] text-indigo-500 font-medium">Histori barang yang Anda bantu promosikan dan menghasilkan komisi.</p>
-                </div>
                 <div id="affiliate-history-list" class="space-y-3"></div>
             </div>
         </div>
@@ -205,18 +210,20 @@
             <h2 class="text-xl font-black uppercase italic tracking-tighter">Pasang Iklan</h2>
         </div>
         <div class="space-y-5">
-            <input type="text" id="title" placeholder="Nama Barang (Contoh: Beat 2019)" class="w-full p-4 border border-gray-200 rounded-xl outline-none">
-            <input type="number" id="wa-number" placeholder="628xxxxxxxxxx" class="w-full p-4 border border-gray-200 rounded-xl outline-none">
-            <select id="upload-location" class="w-full p-4 border border-gray-200 rounded-xl bg-white outline-none font-bold">
-                <option value="Kec. Cicendo, Bandung Kota">Cicendo, Bandung Kota</option>
-                <option value="Kec. Coblong, Bandung Kota">Coblong, Bandung Kota</option>
-                <option value="Kec. Tambaksari, Surabaya">Tambaksari, Surabaya</option>
+            <input type="text" id="title" placeholder="Nama Barang" class="w-full p-4 border border-gray-200 rounded-xl outline-none">
+            <select id="upload-category" class="w-full p-4 border border-gray-200 rounded-xl bg-white outline-none">
+                <option value="Motor">Motor</option>
+                <option value="HP">HP</option>
+                <option value="Laptop">Laptop</option>
+                <option value="Mobil">Mobil</option>
+                <option value="Elektronik">Elektronik</option>
             </select>
+            <input type="number" id="wa-number" placeholder="628xxxxxxxxxx" class="w-full p-4 border border-gray-200 rounded-xl outline-none">
             <button onclick="submitProduct()" class="btn-primary shadow-xl py-5 uppercase tracking-widest">TAYANGKAN SEKARANG</button>
         </div>
     </section>
 
-    <!-- Navigasi Bawah -->
+    <!-- Nav Bawah -->
     <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around items-center h-16 max-w-md mx-auto z-40 px-2 shadow-2xl">
         <button onclick="showPage('home')" id="nav-home" class="nav-link active flex flex-col items-center flex-1 py-1">
             <svg class="w-6 h-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -229,93 +236,90 @@
     </nav>
 
     <script>
-        const defaultProducts = [
-            { id: 1, title: "Honda Vario 150 2021", wa: "6281234567801", district: "Coblong", city: "Bandung", images: ["https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600"], userId: "admin" },
-            { id: 2, title: "iPhone 13 Pro Max", wa: "6281234567802", district: "Gambir", city: "Jakarta", images: ["https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=600"], userId: "admin" },
-            { id: 3, title: "Macbook Air M1 2020", wa: "6281234567803", district: "Tegalsari", city: "Surabaya", images: ["https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=600"], userId: "admin" }
+        const dummyData = [
+            // MOTOR
+            { id: 101, title: "Yamaha NMAX 2022 ABS", wa: "628111222333", district: "Coblong", city: "Bandung", category: "Motor", images: ["https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600"], userId: "admin" },
+            { id: 102, title: "Honda Vario 160 Terbaru", wa: "628111222333", district: "Sukajadi", city: "Bandung", category: "Motor", images: ["https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600"], userId: "admin" },
+            { id: 103, title: "Kawasaki Ninja ZX25R", wa: "628111222333", district: "Cicendo", city: "Bandung", category: "Motor", images: ["https://images.unsplash.com/photo-1444491741275-3747c53c99b4?w=600"], userId: "admin" },
+            { id: 104, title: "Vespa Sprint S 150", wa: "628111222333", district: "Gedebage", city: "Bandung", category: "Motor", images: ["https://images.unsplash.com/photo-1506540232328-89c02d640974?w=600"], userId: "admin" },
+            
+            // HP
+            { id: 201, title: "iPhone 15 Pro Titanium", wa: "628111222333", district: "Gambir", city: "Jakarta", category: "HP", images: ["https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600"], userId: "admin" },
+            { id: 202, title: "Samsung S24 Ultra", wa: "628111222333", district: "Tebet", city: "Jakarta", category: "HP", images: ["https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=600"], userId: "admin" },
+            { id: 203, title: "Xiaomi 14 Global Version", wa: "628111222333", district: "Kemang", city: "Jakarta", category: "HP", images: ["https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600"], userId: "admin" },
+            { id: 204, title: "Google Pixel 8 Pro", wa: "628111222333", district: "Menteng", city: "Jakarta", category: "HP", images: ["https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600"], userId: "admin" },
+
+            // LAPTOP
+            { id: 301, title: "MacBook Pro M3 Max", wa: "628111222333", district: "Tegalsari", city: "Surabaya", category: "Laptop", images: ["https://images.unsplash.com/photo-1517336714460-45731454e2d6?w=600"], userId: "admin" },
+            { id: 302, title: "Asus ROG Zephyrus G14", wa: "628111222333", district: "Gubeng", city: "Surabaya", category: "Laptop", images: ["https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600"], userId: "admin" },
+            { id: 303, title: "Dell XPS 13 Plus", wa: "628111222333", district: "Mulyorejo", city: "Surabaya", category: "Laptop", images: ["https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600"], userId: "admin" },
+            { id: 304, title: "Lenovo ThinkPad X1 Carbon", wa: "628111222333", district: "Wonokromo", city: "Surabaya", category: "Laptop", images: ["https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600"], userId: "admin" },
+
+            // MOBIL
+            { id: 401, title: "Toyota Fortuner 2023", wa: "628111222333", district: "Klojen", city: "Malang", category: "Mobil", images: ["https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600"], userId: "admin" },
+            { id: 402, title: "Honda HRV Prestige", wa: "628111222333", district: "Lowokwaru", city: "Malang", category: "Mobil", images: ["https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600"], userId: "admin" },
+            { id: 403, title: "Hyundai IONIQ 5", wa: "628111222333", district: "Blimbing", city: "Malang", category: "Mobil", images: ["https://images.unsplash.com/photo-1662013915837-775191060933?w=600"], userId: "admin" },
+            { id: 404, title: "Mitsubishi Pajero Sport", wa: "628111222333", district: "Sukun", city: "Malang", category: "Mobil", images: ["https://images.unsplash.com/photo-1532581133564-9ca29e9e8ce9?w=600"], userId: "admin" },
+
+            // ELEKTRONIK
+            { id: 501, title: "Sony PS5 Slim Console", wa: "628111222333", district: "Danurejan", city: "Yogyakarta", category: "Elektronik", images: ["https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=600"], userId: "admin" },
+            { id: 502, title: "LG OLED TV 55 Inch", wa: "628111222333", district: "Gondokusuman", city: "Yogyakarta", category: "Elektronik", images: ["https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=600"], userId: "admin" },
+            { id: 503, title: "Mirrorless Sony A7 III", wa: "628111222333", district: "Mantrijeron", city: "Yogyakarta", category: "Elektronik", images: ["https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600"], userId: "admin" },
+            { id: 504, title: "Dyson V15 Vacuum", wa: "628111222333", district: "Umbulharjo", city: "Yogyakarta", category: "Elektronik", images: ["https://images.unsplash.com/photo-1558317374-067df5f15430?w=600"], userId: "admin" },
         ];
 
-        let products = JSON.parse(localStorage.getItem('babe_v10')) || defaultProducts;
+        let products = JSON.parse(localStorage.getItem('babe_v11')) || dummyData;
         let userData = JSON.parse(localStorage.getItem('babe_user')) || { 
             balance: 0, 
             userId: 'user_' + Math.random().toString(36).substr(2, 9),
             affiliateHistory: [] 
         };
+        let currentCategory = 'Semua';
 
         function formatRupiah(number) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
         }
 
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if(btn.innerText.toLowerCase() === cat.toLowerCase()) {
+                    btn.classList.add('bg-bukalapak', 'text-white');
+                    btn.classList.remove('bg-gray-100', 'text-gray-600');
+                } else {
+                    btn.classList.remove('bg-bukalapak', 'text-white');
+                    btn.classList.add('bg-gray-100', 'text-gray-600');
+                }
+            });
+            renderProducts();
+        }
+
         function renderProducts() {
             const list = document.getElementById('product-list');
             const query = document.getElementById('search-input').value.toLowerCase();
-            const filtered = products.filter(p => p.title.toLowerCase().includes(query));
+            
+            let filtered = products;
+            if(currentCategory !== 'Semua') {
+                filtered = filtered.filter(p => p.category === currentCategory);
+            }
+            filtered = filtered.filter(p => p.title.toLowerCase().includes(query));
 
             list.innerHTML = filtered.map(p => `
                 <div onclick="openDetail(${p.id})" class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex flex-col h-full active:scale-95 transition-all">
-                    <img src="${p.images[0]}" class="w-full h-32 object-cover bg-gray-100">
+                    <div class="relative">
+                        <img src="${p.images[0]}" class="w-full h-32 object-cover bg-gray-100">
+                        <span class="absolute top-2 left-2 bg-black/50 text-white text-[7px] px-1.5 py-0.5 rounded uppercase font-black">${p.category}</span>
+                    </div>
                     <div class="p-3">
                         <p class="text-[8px] text-red-500 font-black uppercase mb-1">${p.district}</p>
                         <h3 class="font-bold text-[10px] text-gray-800 uppercase line-clamp-2 leading-tight">${p.title}</h3>
                         <div class="mt-2 flex items-center justify-between">
                              <p class="text-[8px] text-gray-400 font-bold">${p.city}</p>
-                             <span class="text-[8px] bg-green-50 text-green-600 px-1 font-bold">Komisi Rp 500</span>
+                             <span class="text-[8px] bg-green-50 text-green-600 px-1 font-bold">Rp 500</span>
                         </div>
                     </div>
                 </div>
             `).join('');
-        }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
-            document.getElementById('tab-' + tab).classList.add('active');
-            document.getElementById('section-' + tab).classList.remove('hidden');
-            if(tab === 'my-items') renderMyProducts();
-            if(tab === 'affiliate-items') renderAffiliateHistory();
-        }
-
-        function renderMyProducts() {
-            const list = document.getElementById('my-products-list');
-            const myItems = products.filter(p => p.userId === userData.userId);
-            if(myItems.length === 0) {
-                list.innerHTML = `<div class="col-span-2 text-center py-10 text-gray-400 text-[10px] font-black uppercase">Belum ada barang jualan</div>`;
-                return;
-            }
-            list.innerHTML = myItems.map(p => `
-                <div onclick="openDetail(${p.id})" class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm">
-                    <img src="${p.images[0]}" class="w-full h-24 object-cover">
-                    <div class="p-2">
-                        <h3 class="font-bold text-[9px] text-gray-800 uppercase truncate">${p.title}</h3>
-                        <button onclick="event.stopPropagation(); deleteProduct(${p.id})" class="text-[8px] text-red-500 font-black uppercase mt-2">Hapus</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderAffiliateHistory() {
-            const list = document.getElementById('affiliate-history-list');
-            const affItems = products.filter(p => userData.affiliateHistory.some(h => h.id === p.id));
-            if(affItems.length === 0) {
-                list.innerHTML = `<div class="text-center py-10 text-gray-400 text-[10px] font-black uppercase">Belum ada komisi affiliate</div>`;
-                return;
-            }
-            list.innerHTML = userData.affiliateHistory.map(history => {
-                const p = products.find(prod => prod.id === history.id);
-                if(!p) return '';
-                return `
-                <div class="bg-white p-3 rounded-xl border border-gray-100 flex items-center space-x-3 shadow-sm">
-                    <img src="${p.images[0]}" class="w-12 h-12 rounded-lg object-cover">
-                    <div class="flex-1 overflow-hidden">
-                        <h4 class="text-[9px] font-black uppercase truncate">${p.title}</h4>
-                        <p class="text-[8px] text-gray-500 italic">via ${history.platform}</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-[10px] font-black text-green-600">+Rp 500</p>
-                        <p class="text-[7px] text-gray-400 uppercase font-bold">Cair</p>
-                    </div>
-                </div>`;
-            }).reverse().join('');
         }
 
         function trackAffiliate(platform) {
@@ -327,25 +331,22 @@
             saveUser();
             
             const toast = document.createElement('div');
-            toast.className = "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-900 text-white px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest z-[100] text-center shadow-2xl animate-pulse";
+            toast.className = "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-900 text-white px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest z-[100] text-center shadow-2xl";
             toast.innerHTML = `💰 KOMISI DITERIMA!<br><span class="text-green-400">+Rp 500 via ${platform}</span>`;
             document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 2000);
+            setTimeout(() => toast.remove(), 2500);
 
             const title = document.getElementById('detail-title').innerText;
-            const waLink = document.getElementById('detail-wa-btn').href;
-            const text = encodeURIComponent(`Cek barang bagus di BaBe Aja: ${title}. Hubungi penjual di sini: ${waLink}`);
+            const text = encodeURIComponent(`Cek ${title} di aplikasi BaBe Aja! Barang bagus harga bersahabat.`);
             
-            let url = "";
-            switch(platform) {
-                case 'WA': url = `https://api.whatsapp.com/send?text=${text}`; break;
-                case 'FB': url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`; break;
-                case 'IG': case 'TT': case 'YT':
-                    navigator.clipboard.writeText(`${title} - Cek di BaBe Aja! Hubungi: ${waLink}`);
-                    alert("Link & Info produk berhasil disalin ke clipboard untuk " + platform);
-                    return;
-            }
-            if(url) window.open(url, '_blank');
+            // Simulasi buka sosmed
+            setTimeout(() => {
+                if(platform === 'WhatsApp') window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+                else if(platform === 'Facebook') window.open(`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`, '_blank');
+                else {
+                    navigator.clipboard.writeText(`${title} - Cek di BaBe Aja!`);
+                }
+            }, 1000);
         }
 
         function openDetail(id) {
@@ -357,15 +358,19 @@
             document.getElementById('detail-title').innerText = product.title;
             document.getElementById('detail-full-location').innerText = `📍 Kec. ${product.district}, ${product.city}`;
             document.getElementById('detail-wa-btn').href = "https://wa.me/" + product.wa;
+            
             const slider = document.getElementById('detail-slider');
             slider.innerHTML = product.images.map(img => `<div class="slide-item"><img src="${img}" class="w-full h-full object-cover"></div>`).join('');
+            
             const dotContainer = document.getElementById('dot-container');
             dotContainer.innerHTML = Array(product.images.length).fill(0).map((_, i) => `<div class="dot ${i === 0 ? 'active' : ''}"></div>`).join('');
+            
             const modal = document.getElementById('product-detail-modal');
             modal.classList.remove('hidden');
             setTimeout(() => modal.classList.add('active'), 10);
             document.body.style.overflow = 'hidden';
-            const recommendations = products.filter(p => p.id !== product.id).slice(0, 5);
+
+            const recommendations = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 5);
             document.getElementById('recommendation-list').innerHTML = recommendations.map(p => `
                 <div onclick="event.stopPropagation(); openDetail(${p.id})" class="min-w-[140px] bg-white border rounded-xl overflow-hidden shadow-sm active:scale-95 transition-all">
                     <img src="${p.images[0]}" class="w-full h-20 object-cover">
@@ -376,41 +381,87 @@
             `).join('');
         }
 
+        function closeDetail() {
+            const modal = document.getElementById('product-detail-modal');
+            modal.classList.remove('active');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+            document.body.style.overflow = 'auto';
+        }
+
         function showPage(page) {
             const pages = ['home', 'upload', 'account'];
             pages.forEach(p => document.getElementById('page-' + p).classList.add('hidden'));
             document.getElementById('page-' + page).classList.remove('hidden');
-            const nh = document.getElementById('nav-home'), na = document.getElementById('nav-account');
-            if(page === 'home') { nh.classList.add('active'); na.classList.remove('active'); na.classList.add('text-gray-400'); }
-            else if(page === 'account') { na.classList.add('active'); nh.classList.remove('active'); nh.classList.add('text-gray-400'); switchTab('my-items'); }
-            const modal = document.getElementById('product-detail-modal');
-            if(modal.classList.contains('active')) closeDetail();
+            
+            document.querySelectorAll('.nav-link').forEach(l => {
+                l.classList.remove('active');
+                l.classList.add('text-gray-400');
+            });
+            document.getElementById('nav-' + (page === 'upload' ? 'home' : page)).classList.add('active');
+            
+            if(page === 'account') renderAccount();
         }
 
-        function submitProduct() {
-            const title = document.getElementById('title').value;
-            const wa = document.getElementById('wa-number').value;
-            const locVal = document.getElementById('upload-location').value;
-            if(!title || !wa) return;
-            const locParts = locVal.split(', ');
-            products.unshift({
-                id: Date.now(),
-                title, wa,
-                district: locParts[0].replace('Kec. ', ''),
-                city: locParts[1],
-                images: ["https://images.unsplash.com/photo-1517649763962-0c623066013b?w=600"],
-                userId: userData.userId
-            });
-            localStorage.setItem('babe_v10', JSON.stringify(products));
-            showPage('home');
-            renderProducts();
+        function renderAccount() {
+            // Render barang jualan user
+            const myList = document.getElementById('my-products-list');
+            const myItems = products.filter(p => p.userId === userData.userId);
+            myList.innerHTML = myItems.length ? myItems.map(p => `
+                <div onclick="openDetail(${p.id})" class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm p-2">
+                    <img src="${p.images[0]}" class="w-full h-24 object-cover rounded-lg">
+                    <h3 class="font-bold text-[9px] text-gray-800 uppercase truncate mt-2">${p.title}</h3>
+                    <button onclick="event.stopPropagation(); deleteProduct(${p.id})" class="text-[8px] text-red-500 font-black uppercase mt-1">Hapus</button>
+                </div>
+            `).join('') : '<p class="col-span-2 text-center py-10 text-[9px] text-gray-400 uppercase font-black">Belum ada jualan</p>';
+
+            // Render history komisi
+            const affList = document.getElementById('affiliate-history-list');
+            affList.innerHTML = userData.affiliateHistory.length ? userData.affiliateHistory.slice().reverse().map(h => {
+                const p = products.find(prod => prod.id === h.id);
+                return `
+                <div class="bg-white p-3 rounded-xl border border-gray-100 flex items-center justify-between shadow-sm">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xs font-black">💰</div>
+                        <div>
+                            <p class="text-[9px] font-black uppercase">${p ? p.title : 'Produk'}</p>
+                            <p class="text-[7px] text-gray-400 uppercase">Via ${h.platform}</p>
+                        </div>
+                    </div>
+                    <p class="text-[10px] font-black text-green-600">+Rp 500</p>
+                </div>`;
+            }).join('') : '<p class="text-center py-10 text-[9px] text-gray-400 uppercase font-black">Belum ada komisi</p>';
         }
 
         function deleteProduct(id) {
             if(!confirm("Hapus iklan?")) return;
             products = products.filter(p => p.id !== id);
-            localStorage.setItem('babe_v10', JSON.stringify(products));
-            renderMyProducts();
+            localStorage.setItem('babe_v11', JSON.stringify(products));
+            renderAccount();
+        }
+
+        function submitProduct() {
+            const title = document.getElementById('title').value;
+            const category = document.getElementById('upload-category').value;
+            const wa = document.getElementById('wa-number').value;
+            if(!title || !wa) return;
+            
+            products.unshift({
+                id: Date.now(),
+                title, wa, category,
+                district: "Cicendo", city: "Bandung",
+                images: ["https://images.unsplash.com/photo-1517649763962-0c623066013b?w=600"],
+                userId: userData.userId
+            });
+            localStorage.setItem('babe_v11', JSON.stringify(products));
+            showPage('home');
+            renderProducts();
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('section-' + tab).classList.remove('hidden');
         }
 
         function saveUser() {
@@ -418,13 +469,6 @@
             const bal = formatRupiah(userData.balance || 0);
             document.getElementById('user-points').innerText = bal;
             document.getElementById('account-points').innerText = bal;
-        }
-
-        function closeDetail() {
-            const modal = document.getElementById('product-detail-modal');
-            modal.classList.remove('active');
-            setTimeout(() => modal.classList.add('hidden'), 300);
-            document.body.style.overflow = 'auto';
         }
 
         function updateDots(slider) {
