@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BaBe Aja - Jual Beli Barang Bekas Terdekat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; }
+        .hidden-input { display: none; }
+        .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .bg-bukalapak { background-color: #E31E52; }
+        .text-bukalapak { color: #E31E52; }
+        .border-bukalapak { border-color: #E31E52; }
+        .btn-primary { background-color: #E31E52; color: white; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; width: 100%; display: block; transition: all 0.2s; }
+        .btn-primary:active { transform: scale(0.98); opacity: 0.9; }
+        .active-nav { color: #E31E52 !important; font-weight: bold; }
+    </style>
+</head>
+<body class="max-w-md mx-auto bg-white min-h-screen pb-24 shadow-xl">
+
+    <!-- Header -->
+    <header class="bg-bukalapak text-white p-4 sticky top-0 z-50 flex justify-between items-center shadow-lg">
+        <div class="flex items-center space-x-2">
+            <span class="text-2xl">📦</span>
+            <h1 class="text-xl font-black tracking-tight">BaBe Aja</h1>
+        </div>
+        <button onclick="showPage('upload')" class="bg-white text-bukalapak px-4 py-1.5 rounded-lg text-sm font-bold shadow-sm active:scale-95 transition-transform">
+            + Jual
+        </button>
+    </header>
+
+    <!-- Main Content: Home Page -->
+    <main id="page-home" class="p-4">
+        <!-- Search & Filter -->
+        <div class="mb-5 space-y-3">
+            <div class="relative">
+                <span class="absolute left-3 top-3 text-gray-400">🔍</span>
+                <input type="text" id="search-input" oninput="filterProducts()" placeholder="Cari barang bekas terdekat..." class="w-full pl-10 pr-4 py-3 border rounded-xl bg-gray-50 outline-none focus:ring-2 focus:ring-red-500 transition-all">
+            </div>
+            
+            <div class="grid grid-cols-2 gap-2">
+                <select id="filter-provinsi" class="text-xs p-2 border rounded-lg bg-white outline-none focus:border-red-500" onchange="filterProducts()">
+                    <option value="">Semua Provinsi</option>
+                    <option value="Jawa Barat">Jawa Barat</option>
+                    <option value="Jawa Tengah">Jawa Tengah</option>
+                    <option value="Jawa Timur">Jawa Timur</option>
+                    <option value="Jakarta">DKI Jakarta</option>
+                </select>
+                <select id="filter-kabupaten" class="text-xs p-2 border rounded-lg bg-white outline-none focus:border-red-500" onchange="filterProducts()">
+                    <option value="">Semua Kota/Kab</option>
+                    <option value="Bandung">Bandung</option>
+                    <option value="Semarang">Semarang</option>
+                    <option value="Surabaya">Surabaya</option>
+                    <option value="Jakarta">Jakarta</option>
+                    <option value="Garut">Garut</option>
+                </select>
+            </div>
+            <div class="flex justify-between items-center">
+                <p id="status-text" class="text-[10px] text-gray-400 font-bold uppercase">📍 Menampilkan barang terdekat</p>
+                <button onclick="sortByDistance()" class="text-[10px] bg-gray-100 px-2 py-1 rounded text-bukalapak font-bold">Urutkan Jarak</button>
+            </div>
+        </div>
+
+        <div id="product-list" class="grid grid-cols-1 gap-6">
+            <!-- Produk dinamis -->
+        </div>
+    </main>
+
+    <!-- Page: Saved -->
+    <section id="page-saved" class="hidden p-4">
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+            <span class="mr-2">🔖</span> Barang Disimpan
+        </h2>
+        <div id="saved-list" class="grid grid-cols-1 gap-6">
+            <!-- Produk tersimpan dinamis -->
+        </div>
+    </section>
+
+    <!-- Page: Upload -->
+    <section id="page-upload" class="hidden p-4">
+        <div class="flex items-center mb-6">
+            <button onclick="showPage('home')" class="mr-4 text-bukalapak p-2 bg-red-50 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <h2 class="text-xl font-bold text-gray-800">Pasang Iklan BaBe</h2>
+        </div>
+
+        <div class="space-y-5 pb-10">
+            <div class="bg-gray-50 border-2 border-dashed border-red-200 rounded-2xl p-6 text-center relative">
+                <p class="text-sm font-bold text-red-800 mb-3">1. Foto Barang (Langsung)</p>
+                <input type="file" accept="image/*" capture="environment" id="input-foto" class="hidden-input" onchange="previewFile(this, 'preview-foto')">
+                <button onclick="document.getElementById('input-foto').click()" class="bg-white shadow-md p-5 rounded-full text-2xl">📸</button>
+                <img id="preview-foto" class="mt-4 w-full h-48 object-cover rounded-xl hidden border-2 border-red-500">
+            </div>
+
+            <div class="bg-gray-50 border-2 border-dashed border-blue-200 rounded-2xl p-6 text-center">
+                <p class="text-sm font-bold text-blue-800 mb-3">2. Selfie + Barang (Verifikasi)</p>
+                <input type="file" accept="image/*" capture="user" id="input-selfie" class="hidden-input" onchange="previewFile(this, 'preview-selfie')">
+                <button onclick="document.getElementById('input-selfie').click()" class="bg-white shadow-md p-5 rounded-full text-2xl">🤳</button>
+                <img id="preview-selfie" class="mt-4 w-full h-48 object-cover rounded-xl hidden border-2 border-blue-500">
+            </div>
+
+            <div class="bg-gray-50 border-2 border-dashed border-purple-200 rounded-2xl p-6 text-center">
+                <p class="text-sm font-bold text-purple-800 mb-3">3. Video Pendek (5 Detik)</p>
+                <input type="file" accept="video/*" capture="environment" id="input-video" class="hidden-input" onchange="handleVideo(this)">
+                <button onclick="document.getElementById('input-video').click()" class="bg-white shadow-md p-5 rounded-full text-2xl">🎥</button>
+                <p id="video-status" class="text-xs mt-2 font-bold text-purple-600"></p>
+            </div>
+
+            <div class="bg-white p-2">
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Judul & Harga</label>
+                <input type="text" id="title" placeholder="Contoh: Motor Supra - 7jt" class="w-full p-3 border-b-2 border-gray-100 outline-none focus:border-red-500 text-lg font-semibold">
+            </div>
+
+            <div class="bg-white p-2">
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">WhatsApp (628...)</label>
+                <input type="number" id="wa-number" placeholder="628123456789" class="w-full p-3 border-b-2 border-gray-100 outline-none focus:border-red-500 text-lg font-semibold">
+            </div>
+
+            <div class="bg-red-50 p-4 rounded-xl">
+                <p class="text-xs font-bold text-red-800 uppercase mb-1">📍 Lokasi Otomatis</p>
+                <p id="location-text" class="text-sm text-red-700 italic">Mencari lokasi...</p>
+            </div>
+
+            <button onclick="submitProduct()" id="btn-submit" class="btn-primary mt-4 shadow-lg py-4 text-lg mb-10">
+                Pasang Iklan Sekarang
+            </button>
+        </div>
+    </section>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex justify-around p-3 max-w-md mx-auto shadow-lg z-40">
+        <button onclick="showPage('home')" id="nav-home" class="text-gray-400 flex flex-col items-center flex-1 active-nav">
+            <span class="text-2xl">🏠</span>
+            <span class="text-[10px] font-bold mt-1">Beranda</span>
+        </button>
+        <button onclick="showPage('saved')" id="nav-saved" class="text-gray-400 flex flex-col items-center flex-1">
+            <span class="text-2xl">🔖</span>
+            <span class="text-[10px] font-bold mt-1">Simpan</span>
+        </button>
+        <button onclick="showPage('upload')" id="nav-upload" class="text-gray-400 flex flex-col items-center flex-1">
+            <span class="text-2xl">📸</span>
+            <span class="text-[10px] font-bold mt-1">Jual</span>
+        </button>
+    </nav>
+
+    <script>
+        let currentPos = { lat: -6.2000, lon: 106.8166 };
+        let currentAddress = "Lokasi tidak terdeteksi";
+        
+        // Data Awal
+        const defaultProducts = [
+            { id: 1, title: "Motor Supra 125 Thn 2012 - 7jt", wa: "6281234567890", foto: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500", selfie: "https://i.pravatar.cc/150?u=1", location: "Bandung, Jawa Barat", lat: -6.9175, lon: 107.6191, province: "Jawa Barat", city: "Bandung", time: "10:30" },
+            { id: 2, title: "Motor Trail KLX Gress - 22jt", wa: "6281234567891", foto: "https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?w=500", selfie: "https://i.pravatar.cc/150?u=2", location: "Jakarta Pusat, Jakarta", lat: -6.1805, lon: 106.8285, province: "Jakarta", city: "Jakarta", time: "09:00" }
+        ];
+
+        // State Management
+        let products = JSON.parse(localStorage.getItem('babe_products')) || defaultProducts;
+        let savedIds = JSON.parse(localStorage.getItem('babe_saved')) || [];
+        let tempVideoData = null;
+
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; 
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    currentPos.lat = position.coords.latitude;
+                    currentPos.lon = position.coords.longitude;
+                    try {
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${currentPos.lat}&lon=${currentPos.lon}`);
+                        const data = await res.json();
+                        currentAddress = data.display_name.split(',').slice(0,2).join(',');
+                        document.getElementById('location-text').innerText = currentAddress;
+                        sortByDistance();
+                    } catch (e) {
+                        document.getElementById('location-text').innerText = "Lokasi terdeteksi (GPS)";
+                    }
+                });
+            }
+        }
+
+        function sortByDistance() {
+            products.sort((a, b) => getDistance(currentPos.lat, currentPos.lon, a.lat, a.lon) - getDistance(currentPos.lat, currentPos.lon, b.lat, b.lon));
+            renderProducts(products, 'product-list');
+        }
+
+        function toggleSave(id) {
+            const index = savedIds.indexOf(id);
+            if (index === -1) {
+                savedIds.push(id);
+            } else {
+                savedIds.splice(index, 1);
+            }
+            localStorage.setItem('babe_saved', JSON.stringify(savedIds));
+            renderProducts(products, 'product-list');
+            renderSaved();
+        }
+
+        function filterProducts() {
+            const search = document.getElementById('search-input').value.toLowerCase();
+            const prov = document.getElementById('filter-provinsi').value;
+            const kab = document.getElementById('filter-kabupaten').value;
+            
+            let filtered = products.filter(p => {
+                const matchSearch = p.title.toLowerCase().includes(search);
+                const matchProv = prov === "" || p.province === prov;
+                const matchKab = kab === "" || p.city === kab;
+                return matchSearch && matchProv && matchKab;
+            });
+            renderProducts(filtered, 'product-list');
+        }
+
+        function shareTo(platform, title) {
+            const url = window.location.href;
+            if(platform === 'fb') window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+            else alert("Salin link ini untuk share ke " + platform.toUpperCase() + ": " + url);
+        }
+
+        function showPage(page) {
+            document.getElementById('page-home').classList.add('hidden');
+            document.getElementById('page-upload').classList.add('hidden');
+            document.getElementById('page-saved').classList.add('hidden');
+            
+            document.getElementById('page-' + page).classList.remove('hidden');
+            
+            // Update Nav Style
+            document.getElementById('nav-home').classList.remove('active-nav');
+            document.getElementById('nav-upload').classList.remove('active-nav');
+            document.getElementById('nav-saved').classList.remove('active-nav');
+            document.getElementById('nav-' + page).classList.add('active-nav');
+            
+            if (page === 'saved') renderSaved();
+            window.scrollTo(0,0);
+        }
+
+        function renderSaved() {
+            const savedItems = products.filter(p => savedIds.includes(p.id));
+            const container = document.getElementById('saved-list');
+            if (savedItems.length === 0) {
+                container.innerHTML = `<div class="text-center py-20 text-gray-400 font-bold">Belum ada barang yang disimpan</div>`;
+            } else {
+                renderProducts(savedItems, 'saved-list');
+            }
+        }
+
+        function previewFile(input, imgId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.getElementById(imgId);
+                    img.src = e.target.result;
+                    img.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleVideo(input) {
+            if (input.files[0]) {
+                document.getElementById('video-status').innerText = "✅ Video Siap";
+                tempVideoData = "ready";
+            }
+        }
+
+        function submitProduct() {
+            const title = document.getElementById('title').value;
+            const wa = document.getElementById('wa-number').value;
+            const foto = document.getElementById('preview-foto').src;
+            const selfie = document.getElementById('preview-selfie').src;
+
+            if (!title || !wa || !tempVideoData) {
+                alert("Harap lengkapi semua data dan lampiran!");
+                return;
+            }
+
+            const newProduct = {
+                id: Date.now(),
+                title: title,
+                wa: wa,
+                foto: foto,
+                selfie: selfie,
+                location: currentAddress,
+                lat: currentPos.lat,
+                lon: currentPos.lon,
+                province: "Lokal",
+                city: "Lokal",
+                time: "Baru saja"
+            };
+
+            products.unshift(newProduct);
+            localStorage.setItem('babe_products', JSON.stringify(products));
+            renderProducts(products, 'product-list');
+            showPage('home');
+            alert("Iklan berhasil dipasang!");
+        }
+
+        function renderProducts(dataArray, targetId) {
+            const list = document.getElementById(targetId);
+            list.innerHTML = dataArray.map(p => {
+                const dist = getDistance(currentPos.lat, currentPos.lon, p.lat, p.lon).toFixed(1);
+                const isSaved = savedIds.includes(p.id);
+                return `
+                <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 card-shadow">
+                    <div class="relative">
+                        <img src="${p.foto}" class="w-full h-64 object-cover">
+                        <div class="absolute top-3 left-3 flex space-x-2">
+                            <span class="bg-bukalapak text-white text-[9px] px-2 py-1 rounded font-bold shadow-md">${dist} KM</span>
+                        </div>
+                        <div class="absolute top-3 right-3">
+                            <button onclick="toggleSave(${p.id})" class="bg-white/90 p-2 rounded-full shadow-md text-lg">
+                                ${isSaved ? '❤️' : '🤍'}
+                            </button>
+                        </div>
+                        <div class="absolute bottom-3 right-3 flex items-center bg-white/90 backdrop-blur-md rounded-full px-3 py-1.5 shadow-lg space-x-3 border">
+                            <button onclick="shareTo('fb', '${p.title}')" class="text-blue-600">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                            </button>
+                            <button onclick="shareTo('ig', '${p.title}')" class="text-pink-600">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                            </button>
+                            <button onclick="shareTo('tt', '${p.title}')" class="text-black">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center mb-3 bg-gray-50 p-2 rounded-xl">
+                            <img src="${p.selfie}" class="w-9 h-9 rounded-full border-2 border-white shadow-sm mr-2 object-cover">
+                            <div>
+                                <p class="text-[9px] font-bold text-gray-800 uppercase leading-none">Penjual Terverifikasi</p>
+                                <p class="text-[9px] text-bukalapak italic mt-1 leading-none">Selfie + Barang OK</p>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-lg text-gray-800 leading-tight mb-1">${p.title}</h3>
+                        <p class="text-[11px] text-gray-500 mb-4 truncate">📍 ${p.location}</p>
+                        <a href="https://wa.me/${p.wa}" target="_blank" class="flex items-center justify-center bg-[#25D366] text-white py-3 rounded-xl font-bold text-sm shadow-md">
+                            💬 Chat WA & Video Full
+                        </a>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        window.onload = () => {
+            getLocation();
+            renderProducts(products, 'product-list');
+        };
+    </script>
+</body>
+</html>
